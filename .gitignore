@@ -1,0 +1,9 @@
+myshell
+*.out
+
+*.o
+
+*~
+.DS_Store
+
+test_output.txt
