@@ -369,8 +369,6 @@ void execute_command_with_pipes(const string& input) {
     }
 }
 
-// ================ ЗАДАНИЕ 11: VFS с информацией о пользователях ================
-
 // Функция для получения списка пользователей из /etc/passwd
 vector<UserInfo> get_system_users() {
     vector<UserInfo> users;
@@ -468,7 +466,7 @@ bool add_user_vfs(const string& username) {
     if (pid == 0) {
         // Дочерний процесс
         execlp("sudo", "sudo", "adduser", username.c_str(), NULL);
-        // Если не сработал, пробуем без sudo
+        // без sudo
         execlp("adduser", "adduser", username.c_str(), NULL);
         cerr << "Ошибка: не удалось выполнить adduser" << endl;
         exit(1);
@@ -498,7 +496,7 @@ bool remove_user_vfs(const string& username) {
     if (pid == 0) {
         // Дочерний процесс
         execlp("sudo", "sudo", "userdel", username.c_str(), NULL);
-        // Если не сработал, пробуем без sudo
+        // без sudo
         execlp("userdel", "userdel", username.c_str(), NULL);
         cerr << "Ошибка: не удалось выполнить userdel" << endl;
         exit(1);
@@ -591,7 +589,6 @@ int main() {
     setup_signal_handlers();
     load_history(history, history_file);
    
-    // ============ ЗАДАНИЕ 11: Инициализация VFS ============
     cout << "=== Инициализация VFS для задания 11 ===" << endl;
     if (!create_users_directory()) {
         cerr << "Ошибка: не удалось создать каталог ~/users" << endl;
