@@ -174,21 +174,20 @@ void handle_l_command(const string& input) {
     cout << "Информация о разделах на " << device << ":" << endl;
     cout << "==========================================" << endl;
    
-    // Способы получения информации о разделах (пробуем несколько методов)
    
-    // 1. Попробуем использовать fdisk -l (требует прав root)
+    // 1. Попробуем использовать fdisk -l 
     pid_t pid = fork();
     if (pid == 0) {
         // Дочерний процесс для fdisk
         execlp("fdisk", "fdisk", "-l", device.c_str(), NULL);
        
-        // Если fdisk не сработал, пробуем parted
+        // пробуем parted
         execlp("parted", "parted", device.c_str(), "print", NULL);
        
-        // Если и parted не сработал, пробуем lsblk
+        // пробуем lsblk
         execlp("lsblk", "lsblk", device.c_str(), NULL);
        
-        // Если ничего не работает
+        // ничего не работает
         cerr << "Не удалось получить информацию о разделах" << endl;
         cerr << "Установите fdisk, parted или lsblk" << endl;
         exit(1);
@@ -199,7 +198,7 @@ void handle_l_command(const string& input) {
         if (WIFEXITED(status) && WEXITSTATUS(status) != 0) {
             cout << "Для получения подробной информации могут потребоваться права root" << endl;
            
-            // 2. Пробуем более простой способ - чтение из /proc/partitions
+            // чтение из /proc/partitions
             cout << "\nБазовая информация из /proc/partitions:" << endl;
            
             ifstream partitions("/proc/partitions");
@@ -220,12 +219,12 @@ void handle_l_command(const string& input) {
                 }
             }
            
-            // 3. Пробуем использовать stat для получения размера
+            // stat для получения размера
             cout << "\nДополнительная информация:" << endl;
             cout << "Устройство: " << device << endl;
             cout << "Размер блока: " << st.st_blksize << " байт" << endl;
            
-            // Пробуем получить размер устройства через ioctl
+            // размер устройства через ioctl
             int fd = open(device.c_str(), O_RDONLY);
             if (fd >= 0) {
                 unsigned long long size = 0;
