@@ -19,7 +19,6 @@ volatile sig_atomic_t sighup_received = 0;
 // Обработчик сигнала SIGHUP
 void sighup_handler(int sig) {
     if (sig == SIGHUP) {
-        // Используем write() так как она безопасна в обработчиках сигналов
         const char* msg = "\nConfiguration reloaded\n";
         write(STDOUT_FILENO, msg, 24);
         sighup_received = 1;
